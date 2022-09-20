@@ -1,2 +1,2 @@
-# proxy-server
-made transparent proxy
+# Proxy-Server
+make your transparent proxy (nodejs required)
