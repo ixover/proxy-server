@@ -1,0 +1,49 @@
+#!/bin/bash
+DIR="~/proxy-server"
+if [[ $1 && $1 = "stop" ]]
+  then
+    if [[ -f $DIR/p.pid ]];then
+        myp=$(cat $DIR/p.pid)
+        kill $myp
+        echo "proxy server has been stopped"
+      else
+        echo "proxy server not exist!"
+    fi
+    exit 1
+fi
+echo "Install Proxy"
+if [ ! -d "$DIR" ]; then
+  mkdir $DIR
+  echo "{
+  \"name\": \"proxy\",
+  \"version\": \"1.0.0\",
+  \"description\": \"\",
+  \"main\": \"index.js\",
+  \"scripts\": {
+    \"test\": \"echo \\"Error: no test specified\\" && exit 1\"
+  },
+  \"keywords\": [],
+  \"author\": \"\",
+  \"license\": \"ISC\",
+  \"dependencies\": {
+    \"transparent-proxy\": \"^1.8.11\"
+  }
+}">$DIR/package.json
+echo "const ProxyServer = require('transparent-proxy');const server = new ProxyServer({upstream: function (data, session) {},auth: function (username, password) {return username === 'set' && password === 'proxy';}});server.listen(9000, '0.0.0.0', function () {console.log('TCP-Proxy-Server started!', server.address());});">$DIR/index.js
+npm install --prefix $DIR
+fi
+echo "Starting Proxy"
+node $DIR/index.js &>1 &
+_pid=$! 
+sleep 2
+if ps -p $_pid > /dev/null
+then
+   echo "$_pid is running"
+   echo "$_pid">$DIR/p.pid
+   echo "if you have firewall dont forget to open 9000/tcp port"
+   echo "sudo firewall-cmd --zone=public --permanent --add-port=27888/tcp"
+   echo "sudo firewall-cmd --reload"
+else
+    echo "Something went wrong"
+fi
+exit 1
