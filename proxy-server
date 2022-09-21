@@ -1,18 +1,18 @@
 #!/bin/bash
-DIR="~/proxy-server"
+DIR=~/proxy-server
 if [[ $1 && $1 = "stop" ]]
   then
     if [[ -f $DIR/p.pid ]];then
-        myp=$(cat $DIR/p.pid)
-        kill $myp
+        myp=$(cat $DIR/p.pid 2> /dev/null)
+        kill $myp 2> /dev/null
         echo "proxy server has been stopped"
       else
         echo "proxy server not exist!"
     fi
     exit 1
 fi
-echo "Install Proxy"
 if [ ! -d "$DIR" ]; then
+  echo "Install Proxy"
   mkdir $DIR
   echo "{
   \"name\": \"proxy\",
@@ -20,7 +20,7 @@ if [ ! -d "$DIR" ]; then
   \"description\": \"\",
   \"main\": \"index.js\",
   \"scripts\": {
-    \"test\": \"echo \\"Error: no test specified\\" && exit 1\"
+    \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"
   },
   \"keywords\": [],
   \"author\": \"\",
@@ -33,7 +33,7 @@ echo "const ProxyServer = require('transparent-proxy');const server = new ProxyS
 npm install --prefix $DIR
 fi
 echo "Starting Proxy"
-node $DIR/index.js &>1 &
+node $DIR/index.js &>/dev/null &
 _pid=$! 
 sleep 2
 if ps -p $_pid > /dev/null
