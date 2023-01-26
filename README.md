@@ -11,3 +11,8 @@ sudo chmod +rx /usr/local/bin/proxy-server
 proxy-server # to start
 proxy-server stop # to stop
 ```
+## Configuration
+```
+username: set
+password: proxy
+```
