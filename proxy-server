@@ -41,7 +41,7 @@ then
    echo "$_pid is running"
    echo "$_pid">$DIR/p.pid
    echo "if you have firewall dont forget to open 9000/tcp port"
-   echo "sudo firewall-cmd --zone=public --permanent --add-port=27888/tcp"
+   echo "sudo firewall-cmd --zone=public --permanent --add-port=9000/tcp"
    echo "sudo firewall-cmd --reload"
 else
     echo "Something went wrong"
